@@ -19,18 +19,3 @@ function initMap() {
 }
 
 export default initMap
-
-/*
-
-map.addListener("click", (mapsMouseEvent) => {
-  // Create a new InfoWindow.
-  infoWindow = new google.maps.InfoWindow({
-    position: mapsMouseEvent.latLng,
-  });
-  infoWindow.setContent(
-    JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
-  );
-  infoWindow.open(map);
-});
-
-*/
