@@ -1,0 +1,15 @@
+body {
+    font: 16px/1.5 Helvetica, sans-serif;
+}
+
+#map {
+    border: solid 1px black;
+    height: 50vh;
+    margin: 1rem;
+}
+
+#result {
+    background: #e7e7e7;
+    margin: 1rem;
+    padding: 1rem;
+}
