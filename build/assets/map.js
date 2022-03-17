@@ -1,4 +1,5 @@
 import writeResult from './logger.js'
+import todaysDay from './days.js'
 
 let map
 
@@ -8,7 +9,11 @@ function initMap() {
         zoom: 8,
     })
     map.addListener('click', mapsMouseEvent => {
-        const str = JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 4)
+        const result = {
+            day: todaysDay(),
+            point: mapsMouseEvent.latLng.toJSON(),
+        }
+        const str = JSON.stringify(result, null, 4)
         writeResult(str)
     })
 }
