@@ -1,15 +1,18 @@
 body {
     font: 16px/1.5 Helvetica, sans-serif;
+    padding: 0 1rem;
 }
 
 #map {
     border: solid 1px black;
     height: 50vh;
-    margin: 1rem;
+    margin: 1rem 0;
 }
 
 #result {
     background: #e7e7e7;
-    margin: 1rem;
+    font: 14px/1.2 monospace;
+    margin: 1rem 0;
     padding: 1rem;
+    white-space: pre-wrap;
 }
