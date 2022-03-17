@@ -1,3 +1,4 @@
+import initMap from './map.js';
 
 function writeResult(str) {
     const result = document.querySelector('#result')
@@ -8,6 +9,7 @@ function writeResult(str) {
 function init() {
     writeResult('hello, world')
     writeResult('hello, yourself')
+    initMap()
 }
 
 init()
