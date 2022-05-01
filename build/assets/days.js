@@ -2,7 +2,7 @@ const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 
 
 function todaysDay() {
     const today = new Date()
-    const day = today.getUTCDay()
+    const day = today.getDay()
     return days[day]
 }
 
