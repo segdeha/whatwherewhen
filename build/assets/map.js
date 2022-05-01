@@ -3,8 +3,8 @@ import todaysDay from './days.js'
 
 function initMap() {
     const map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 8,
+        center: { lat: 45.533, lng: -122.63 },
+        zoom: 14,
     })
     map.addListener('click', mapsMouseEvent => {
         const point = mapsMouseEvent.latLng
