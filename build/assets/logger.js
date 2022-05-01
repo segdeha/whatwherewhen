@@ -23,7 +23,7 @@ function saveData(data) {
 }
 
 function writeResult(result) {
-    const data = JSON.parse(localStorage.getItem('whatwherewhen'))
+    const data = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY))
     data[result.day].push(result.point)
     saveData(data)
 }
