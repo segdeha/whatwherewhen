@@ -6,17 +6,21 @@ function initMap() {
         center: { lat: -34.397, lng: 150.644 },
         zoom: 8,
     })
-    const todaysPoints = readState(todaysDay())
     map.addListener('click', mapsMouseEvent => {
+        const point = mapsMouseEvent.latLng
+        vertices.push(point)
         const result = {
             day: todaysDay(),
-            point: mapsMouseEvent.latLng.toJSON(),
+            point: point.toJSON(),
         }
         writeResult(result)
     })
-    map.data.add({
-      geometry: new google.maps.Data.Polygon([todaysPoints]),
+    const todaysPoints = readState(todaysDay())
+    const polygon = new google.maps.Polygon({
+        paths: todaysPoints,
     })
+    polygon.setMap(map)
+    const vertices = polygon.getPath()
 }
 
 export default initMap
