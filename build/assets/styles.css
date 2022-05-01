@@ -3,6 +3,11 @@ body {
     padding: 0 1rem;
 }
 
+h1 {
+    text-align: center;
+    text-transform: capitalize;
+}
+
 #map {
     border: solid 1px black;
     height: 80vh;
