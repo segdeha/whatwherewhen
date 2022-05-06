@@ -10,6 +10,18 @@ function followMe(map) {
     }
 }
 
+function initPolygon(map) {
+    // show whatever points are present for the given day
+    const todaysPoints = readState(todaysDay())
+    const polygon = new google.maps.Polygon({
+        paths: todaysPoints,
+    })
+    polygon.setMap(map)
+
+    // delcaring this here makes it available within the event listener
+    const vertices = polygon.getPath()
+}
+
 function initMap() {
     // new map, centered on NE 33rd & Sandy
     const map = new google.maps.Map(document.getElementById("map"), {
@@ -33,15 +45,7 @@ function initMap() {
         writeResult(result)
     })
 
-    // show whatever points are present for the given day
-    const todaysPoints = readState(todaysDay())
-    const polygon = new google.maps.Polygon({
-        paths: todaysPoints,
-    })
-    polygon.setMap(map)
-
-    // delcaring this here makes it available within the event listener
-    const vertices = polygon.getPath()
+    initPolygon(map)
 
     // pan the map to user's current location
     followMe(map)
