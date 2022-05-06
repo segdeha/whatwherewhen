@@ -3,9 +3,17 @@ import { initData } from './logger.js';
 import todaysDay from './days.js'
 
 function initUI() {
-    let today = todaysDay()
-    let cappedDay = today[0].toUpperCase() + today.substring(1)
-    document.querySelector('h1').innerHTML = `Where are they on a ${cappedDay}?`
+    const today = todaysDay()
+    selectNavItem(today)
+}
+
+function selectNavItem(day) {
+    const lis = document.querySelectorAll('header ul li')
+    for (let i = 0; i < lis.length; i += 1) {
+        lis[i].classList.remove('selected')
+    }
+    const li = document.querySelector(`[data-day="${day}"]`)
+    li.classList.add('selected')
 }
 
 function init() {
