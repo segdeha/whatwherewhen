@@ -21,28 +21,50 @@ function initPolygon(map) {
     // show whatever points are present for the given day
     const todaysPoints = readState(todaysDay())
 
-    // calculate the convex hull
+    // add points to the map and to the hull
     todaysPoints.forEach(point => {
-        const marker = new google.maps.Marker({
-            position: new google.maps.LatLng(point.lat, point.lng),
-            icon: '/assets/img/bin.png',
-            map,
-        })
+        addMarker(map, new google.maps.LatLng(point.lat, point.lng))
         convexHull.addPoint(point.lat, point.lng)
     })
 
+    // calculate the convex hull
     const hull = convexHull.getHull()
     const hullPoints = todaysPoints.length > 0 ? hull.map(point => {
         return new google.maps.LatLng(point.x, point.y)
     }) : []
 
-    const polyHull = new google.maps.Polygon({
+    const polygon = new google.maps.Polygon({
         paths: hullPoints.length > 0 ? hullPoints : [],
     })
-    polyHull.setMap(map)
+    polygon.setMap(map)
 
     // delcaring this here makes it available within the event listener
-    return polyHull.getPath()
+    return polygon.getPath()
+}
+
+function addMarker(map, point) {
+    const marker = new google.maps.Marker({
+        position: point,
+        icon: '/assets/img/bin.png',
+        map,
+    })
+}
+
+function addPoint(mapsMouseEvent) {
+    const point = mapsMouseEvent.latLng
+    try {
+        // this === vertices
+        this.vertices.push(point)
+        addMarker(this.map, point)
+    }
+    catch (e) {
+        console.log('First point, probably, otherwise', e)
+    }
+    const result = {
+        day: todaysDay(),
+        point: point.toJSON(),
+    }
+    writeResult(result)
 }
 
 function initMap() {
@@ -53,23 +75,10 @@ function initMap() {
         clickableIcons: false,
     })
 
-    // allow the user to click on the map to set points
-    map.addListener('click', mapsMouseEvent => {
-        const point = mapsMouseEvent.latLng
-        try {
-            vertices.push(point)
-        }
-        catch (e) {
-            console.log('first point, probably, otherwise', e)
-        }
-        const result = {
-            day: todaysDay(),
-            point: point.toJSON(),
-        }
-        writeResult(result)
-    })
-
     const vertices = initPolygon(map)
+
+    // allow the user to click on the map to set points
+    map.addListener('click', addPoint.bind({ map, vertices }))
 
     // pan the map to user's current location
     followMe(map)
