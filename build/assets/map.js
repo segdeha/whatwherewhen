@@ -19,7 +19,7 @@ function initPolygon(map) {
     polygon.setMap(map)
 
     // delcaring this here makes it available within the event listener
-    const vertices = polygon.getPath()
+    return polygon.getPath()
 }
 
 function initMap() {
@@ -27,6 +27,7 @@ function initMap() {
     const map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: 45.53, lng: -122.63 },
         zoom: 14,
+        clickableIcons: false,
     })
 
     // allow the user to click on the map to set points
@@ -45,7 +46,7 @@ function initMap() {
         writeResult(result)
     })
 
-    initPolygon(map)
+    const vertices = initPolygon(map)
 
     // pan the map to user's current location
     followMe(map)
