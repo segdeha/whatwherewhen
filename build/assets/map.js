@@ -11,15 +11,38 @@ function followMe(map) {
 }
 
 function initPolygon(map) {
+    // ConvexHullGrahamScan is currently available globally in the browser
+    // TODO make it a module
+    // A convex hull is a math concept that will put a rubber band around
+    // the outside of a set of points
+    // https://github.com/brian3kb/graham_scan_js
+    const convexHull = new ConvexHullGrahamScan()
+
     // show whatever points are present for the given day
     const todaysPoints = readState(todaysDay())
-    const polygon = new google.maps.Polygon({
-        paths: todaysPoints,
+
+    // calculate the convex hull
+    todaysPoints.forEach(point => {
+        const marker = new google.maps.Marker({
+            position: new google.maps.LatLng(point.lat, point.lng),
+            icon: '/assets/img/bin.png',
+            map,
+        })
+        convexHull.addPoint(point.lat, point.lng)
     })
-    polygon.setMap(map)
+
+    const hull = convexHull.getHull()
+    const hullPoints = todaysPoints.length > 0 ? hull.map(point => {
+        return new google.maps.LatLng(point.x, point.y)
+    }) : []
+
+    const polyHull = new google.maps.Polygon({
+        paths: hullPoints.length > 0 ? hullPoints : [],
+    })
+    polyHull.setMap(map)
 
     // delcaring this here makes it available within the event listener
-    return polygon.getPath()
+    return polyHull.getPath()
 }
 
 function initMap() {
