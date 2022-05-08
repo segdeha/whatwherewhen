@@ -1,6 +1,6 @@
 {
-  "short_name": "What/Where/When",
-  "name": "What/Where/When",
+  "short_name": "Bins",
+  "name": "Where the bins at",
   "icons": [
     {
       "src": "/assets/img/bin.png",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#92b3f2",
+  "background_color": "#e8eaed"
 }
