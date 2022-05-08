@@ -18,7 +18,7 @@ header {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
         header ul li.selected {
-            background: rgb(91, 132, 220);
+            background: #5a88ed;
         }
 
 #map {
