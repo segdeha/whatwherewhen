@@ -2,6 +2,10 @@ import { writeResult, readState } from './logger.js'
 import todaysDay from './days.js'
 
 function followMe(map) {
+    // TODO integrate findDistance from haversine.js to auto-zoom
+    // the map when the user is on the move
+    // 0.05km seems a reasonable distance
+
     // will prompt the user for permission to access their location
     navigator.geolocation.watchPosition(pan, console.log)
     function pan(loc) {
