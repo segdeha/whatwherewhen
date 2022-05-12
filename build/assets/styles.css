@@ -15,7 +15,7 @@ header {
         margin: 0;
         padding: 0;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
         header ul li.selected {
             background: #5a88ed;
