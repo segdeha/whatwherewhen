@@ -1,4 +1,5 @@
 import sortPoints from './sorter.js'
+import todaysDay from './days.js'
 
 const LOCALSTORAGE_KEY = 'whatwherewhen'
 
@@ -28,6 +29,20 @@ function writeResult(result) {
     saveData(data)
 }
 
+function removePoint(lat, lng) {
+    const today = todaysDay()
+    const data = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY))
+    const todaysPoints = data[today]
+    for (let i = 0; i < todaysPoints.length; i += 1) {
+        if (todaysPoints[i].lat === lat && todaysPoints[i].lng === lng) {
+            todaysPoints.splice(i, 1)
+            break
+        }
+    }
+    data[today] = todaysPoints
+    saveData(data)
+}
+
 function readState(day) {
     const json = localStorage.getItem(LOCALSTORAGE_KEY)
     let data = JSON.parse(json)
@@ -43,4 +58,4 @@ function readState(day) {
     return day ? sortPoints(data[day]) : data
 }
 
-export { initData, writeResult, readState }
+export { initData, writeResult, removePoint, readState }

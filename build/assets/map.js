@@ -1,8 +1,9 @@
-import { writeResult, readState } from './logger.js'
+import { writeResult, removePoint, readState } from './logger.js'
 import todaysDay from './days.js'
 
 const state = {
     map: null,
+    vertices: [],
     shouldFollow: true,
     lastCoords: { lat: 45.53, lng: -122.63 }
 }
@@ -72,16 +73,33 @@ function addMarker(point) {
         icon: '/assets/img/bin.png',
         map: state.map,
     })
+    marker.addListener('click', removeMarker.bind({ marker }))
+}
+
+function removeMarker() {
+    const { vertices } = state
+    const lat = this.marker.position.lat()
+    const lng = this.marker.position.lng()
+    for (let i = 0; i < vertices.length; i += 1) {
+        const v = vertices.getAt(i)
+        const vLat = v.lat()
+        const vLng = v.lng()
+        if (vLat === lat && vLng === lng) {
+            removePoint(vLat, vLng)
+            this.marker.setMap(null)
+            break
+        }
+    }
 }
 
 function addPoint(mapsMouseEvent) {
     const point = mapsMouseEvent.latLng
     try {
-        // this === vertices
-        this.vertices.push(point)
-        addMarker(state.map, point)
+        state.vertices.push(point)
+        addMarker(point)
     }
     catch (e) {
+        // FIXME
         console.log('First point, probably, otherwise', e)
     }
     const result = {
@@ -99,10 +117,10 @@ function initMap() {
         clickableIcons: false,
     })
 
-    const vertices = initPolygon()
+    state.vertices = initPolygon()
 
     // allow the user to click on the map to set points
-    state.map.addListener('click', addPoint.bind({ vertices }))
+    state.map.addListener('click', addPoint)
 
     // pan the map to user's current location
     followMe()
