@@ -1,10 +1,11 @@
-import initMap from './map.js';
+import { initMap, toggleFollowing } from './map.js';
 import { initData } from './logger.js';
 import todaysDay from './days.js'
 
 function initUI() {
     const today = todaysDay()
     selectNavItem(today)
+    document.querySelector('[data-day="follow"] a').addEventListener('click', toggleFollowing)
 }
 
 function selectNavItem(day) {

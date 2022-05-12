@@ -1,8 +1,12 @@
+:root {
+    --header-height: 36px;
+}
+
 header {
     background: #333;
     color: white;
-    font: 16px/2 Helvetica, sans-serif;
-    height: 32px;
+    font: 16px/var(--header-height) Helvetica, sans-serif;
+    height: var(--header-height);
     left: 0;
     margin: 0;
     position: absolute;
@@ -15,16 +19,27 @@ header {
         margin: 0;
         padding: 0;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr;
     }
         header ul li.selected {
             background: #5a88ed;
         }
+        header ul li {
+            border-right: solid 1px #666;
+        }
+        header ul li:last-child {
+            border: none;
+        }
+
+/* should follow button */
+[data-day="follow"] .disabled {
+    filter: grayscale(1);
+}
 
 #map {
     bottom: 0;
     left: 0;
     position: absolute;
     right: 0;
-    top: 32px;
+    top: var(--header-height);
 }

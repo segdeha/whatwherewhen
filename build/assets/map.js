@@ -1,7 +1,20 @@
 import { writeResult, readState } from './logger.js'
 import todaysDay from './days.js'
 
-function followMe(map) {
+const state = {
+    map: null,
+    shouldFollow: true,
+    lastCoords: { lat: 45.53, lng: -122.63 }
+}
+
+function toggleFollowing() {
+    state.shouldFollow = !state.shouldFollow
+    const { lat, lng } = state.lastCoords
+    state.shouldFollow && panToCoords(lat, lng)
+    document.querySelector('[data-day="follow"] a').classList.toggle('disabled')
+}
+
+function followMe() {
     // TODO integrate findDistance from haversine.js to auto-zoom
     // the map when the user is on the move
     // 0.05km seems a reasonable distance
@@ -10,11 +23,18 @@ function followMe(map) {
     navigator.geolocation.watchPosition(pan, console.log)
     function pan(loc) {
         const { latitude, longitude } = loc.coords
-        map.panTo(new google.maps.LatLng(latitude, longitude))
+        state.lastCoords = { lat: latitude, lng: longitude }
+        if (state.shouldFollow) {
+            panToCoords(latitude, longitude)
+        }
     }
 }
 
-function initPolygon(map) {
+function panToCoords(lat, lng) {
+    state.map.panTo(new google.maps.LatLng(lat, lng))
+}
+
+function initPolygon() {
     // ConvexHullGrahamScan is currently available globally in the browser
     // TODO make it a module
     // A convex hull is a math concept that will put a rubber band around
@@ -27,7 +47,7 @@ function initPolygon(map) {
 
     // add points to the map and to the hull
     todaysPoints.forEach(point => {
-        addMarker(map, new google.maps.LatLng(point.lat, point.lng))
+        addMarker(new google.maps.LatLng(point.lat, point.lng))
         convexHull.addPoint(point.lat, point.lng)
     })
 
@@ -40,17 +60,17 @@ function initPolygon(map) {
     const polygon = new google.maps.Polygon({
         paths: hullPoints.length > 0 ? hullPoints : [],
     })
-    polygon.setMap(map)
+    polygon.setMap(state.map)
 
     // delcaring this here makes it available within the event listener
     return polygon.getPath()
 }
 
-function addMarker(map, point) {
+function addMarker(point) {
     const marker = new google.maps.Marker({
         position: point,
         icon: '/assets/img/bin.png',
-        map,
+        map: state.map,
     })
 }
 
@@ -59,7 +79,7 @@ function addPoint(mapsMouseEvent) {
     try {
         // this === vertices
         this.vertices.push(point)
-        addMarker(this.map, point)
+        addMarker(state.map, point)
     }
     catch (e) {
         console.log('First point, probably, otherwise', e)
@@ -73,19 +93,19 @@ function addPoint(mapsMouseEvent) {
 
 function initMap() {
     // new map, centered on NE 33rd & Sandy
-    const map = new google.maps.Map(document.getElementById("map"), {
+    state.map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: 45.53, lng: -122.63 },
         zoom: 14,
         clickableIcons: false,
     })
 
-    const vertices = initPolygon(map)
+    const vertices = initPolygon()
 
     // allow the user to click on the map to set points
-    map.addListener('click', addPoint.bind({ map, vertices }))
+    state.map.addListener('click', addPoint.bind({ vertices }))
 
     // pan the map to user's current location
-    followMe(map)
+    followMe()
 }
 
-export default initMap
+export { initMap, toggleFollowing }
