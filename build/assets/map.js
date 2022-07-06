@@ -5,13 +5,16 @@ const state = {
     map: null,
     vertices: [],
     shouldFollow: true,
+    meMarker: null,
     lastCoords: { lat: 45.53, lng: -122.63 }
 }
 
 function toggleFollowing() {
     state.shouldFollow = !state.shouldFollow
     const { lat, lng } = state.lastCoords
-    state.shouldFollow && panToCoords(lat, lng)
+    if (state.shouldFollow) {
+        panToCoords(lat, lng)
+    }
     document.querySelector('[data-day="follow"] a').classList.toggle('disabled')
 }
 
@@ -25,6 +28,8 @@ function followMe() {
     function pan(loc) {
         const { latitude, longitude } = loc.coords
         state.lastCoords = { lat: latitude, lng: longitude }
+        // always move the user whether or not we’re following them
+        moveMeMarker(latitude, longitude)
         if (state.shouldFollow) {
             panToCoords(latitude, longitude)
         }
@@ -33,6 +38,23 @@ function followMe() {
 
 function panToCoords(lat, lng) {
     state.map.panTo(new google.maps.LatLng(lat, lng))
+}
+
+function makeMeMarker(lat, lng) {
+    const position = new google.maps.LatLng(lat, lng)
+    const icon = {
+        url: '/assets/img/me.png',
+        scaledSize: new google.maps.Size(16, 16),
+        origin: new google.maps.Point(0,0),
+        anchor: new google.maps.Point(0, 0),
+    }
+    const { map } = state
+    state.meMarker = new google.maps.Marker({ position, icon, map })
+}
+
+function moveMeMarker(lat, lng) {
+    const newPosition = new google.maps.LatLng(lat, lng)
+    state.meMarker.setPosition(newPosition)
 }
 
 function initPolygon() {
@@ -110,9 +132,11 @@ function addPoint(mapsMouseEvent) {
 }
 
 function initMap() {
+    const center = { lat: 45.53, lng: -122.63 }
+    const { lat, lng } = center
     // new map, centered on NE 33rd & Sandy
     state.map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 45.53, lng: -122.63 },
+        center,
         zoom: 14,
         clickableIcons: false,
     })
@@ -121,6 +145,8 @@ function initMap() {
 
     // allow the user to click on the map to set points
     state.map.addListener('click', addPoint)
+
+    makeMeMarker(lat, lng)
 
     // pan the map to user's current location
     followMe()
