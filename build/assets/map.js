@@ -139,6 +139,9 @@ function initMap() {
         center,
         zoom: 14,
         clickableIcons: false,
+        fullscreenControl: false,
+        mapTypeControl: false,
+        streetViewControl: false,
     })
 
     state.vertices = initPolygon()
