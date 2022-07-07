@@ -3,10 +3,20 @@ import todaysDay from './days.js'
 
 const DEFAULT_ZOOM = 14
 
+// ConvexHullGrahamScan is currently available globally in the browser
+// TODO make it a module
+// A convex hull is a math concept that will put a rubber band around
+// the outside of a set of points
+// https://github.com/brian3kb/graham_scan_js
+// made this global so the object wouldn’t be created anew each time
+// we redraw the map
+const convexHull = new ConvexHullGrahamScan()
+
 const state = {
     map: null,
     vertices: [],
     meMarker: null,
+    polygon: null,
     lastCoords: { lat: 45.53, lng: -122.63 }
 }
 
@@ -55,14 +65,7 @@ function moveMeMarker(lat, lng) {
     state.meMarker.setPosition(newPosition)
 }
 
-function initPolygon() {
-    // ConvexHullGrahamScan is currently available globally in the browser
-    // TODO make it a module
-    // A convex hull is a math concept that will put a rubber band around
-    // the outside of a set of points
-    // https://github.com/brian3kb/graham_scan_js
-    const convexHull = new ConvexHullGrahamScan()
-
+function drawPolygon() {
     // show whatever points are present for the given day
     const todaysPoints = readState(todaysDay())
 
@@ -78,13 +81,14 @@ function initPolygon() {
         return new google.maps.LatLng(point.x, point.y)
     }) : []
 
-    const polygon = new google.maps.Polygon({
+    state.polygon?.setMap(null)
+    state.polygon = new google.maps.Polygon({
         paths: hullPoints.length > 0 ? hullPoints : [],
     })
-    polygon.setMap(state.map)
+    state.polygon.setMap(state.map)
 
     // delcaring this here makes it available within the event listener
-    return polygon.getPath()
+    return state.polygon.getPath()
 }
 
 function addMarker(point) {
@@ -117,6 +121,7 @@ function addPoint(mapsMouseEvent) {
     try {
         state.vertices.push(point)
         addMarker(point)
+        drawPolygon()
     }
     catch (e) {
         // FIXME
@@ -144,7 +149,7 @@ function initMap() {
         streetViewControl: false,
     })
 
-    state.vertices = initPolygon()
+    state.vertices = drawPolygon()
 
     // allow the user to click on the map to set points
     state.map.addListener('click', addPoint)
