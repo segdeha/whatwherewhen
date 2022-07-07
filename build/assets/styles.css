@@ -1,5 +1,5 @@
 :root {
-    --header-height: 36px;
+    --header-height: 72px;
 }
 
 header {
@@ -15,21 +15,22 @@ header {
     text-align: center;
 }
     header ul {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr;
         list-style: none;
         margin: 0;
         padding: 0;
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr;
     }
-        header ul li.selected {
-            background: #5a88ed;
-        }
         header ul li {
             border-right: solid 1px #666;
         }
-        header ul li:last-child {
-            border: none;
-        }
+            header ul li a {}
+            header ul li.selected {
+                background: #5a88ed;
+            }
+            header ul li:last-child {
+                border: none;
+            }
 
 /* should follow button */
 [data-day="follow"] .disabled {
