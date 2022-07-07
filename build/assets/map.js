@@ -11,6 +11,8 @@ const state = {
 }
 
 function zoom() {
+    const { lat, lng } = state.lastCoords
+    panToCoords(lat, lng)
     state.map.setZoom(DEFAULT_ZOOM + 3)
 }
 
