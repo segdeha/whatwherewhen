@@ -1,21 +1,17 @@
 import { writeResult, removePoint, readState } from './logger.js'
 import todaysDay from './days.js'
 
+const DEFAULT_ZOOM = 14
+
 const state = {
     map: null,
     vertices: [],
-    shouldFollow: true,
     meMarker: null,
     lastCoords: { lat: 45.53, lng: -122.63 }
 }
 
-function toggleFollowing() {
-    state.shouldFollow = !state.shouldFollow
-    const { lat, lng } = state.lastCoords
-    if (state.shouldFollow) {
-        panToCoords(lat, lng)
-    }
-    document.querySelector('[data-day="follow"] a').classList.toggle('disabled')
+function zoom() {
+    state.map.setZoom(DEFAULT_ZOOM + 3)
 }
 
 function followMe() {
@@ -137,7 +133,7 @@ function initMap() {
     // new map, centered on NE 33rd & Sandy
     state.map = new google.maps.Map(document.getElementById("map"), {
         center,
-        zoom: 14,
+        zoom: DEFAULT_ZOOM,
         clickableIcons: false,
         fullscreenControl: false,
         mapTypeControl: false,
@@ -155,4 +151,4 @@ function initMap() {
     followMe()
 }
 
-export { initMap, toggleFollowing }
+export { initMap, zoom }
