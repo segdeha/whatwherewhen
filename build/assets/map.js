@@ -119,6 +119,8 @@ function addPoint(mapsMouseEvent) {
     catch (e) {
         // FIXME
         console.log('First point, probably, otherwise', e)
+        // FIXME super janky workaround
+        document.querySelector('[data-day="reload"] a').click()
     }
     const result = {
         day: todaysDay(),
