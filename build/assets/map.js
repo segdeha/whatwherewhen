@@ -110,7 +110,7 @@ function setDirection(lat, lng) {
         state.direction = 'sw'
     }
 
-    document.querySelector('#debug').innerHTML = document.querySelector('#debug').innerHTML + `${state.direction}<br>`
+    document.querySelector('#debug').innerHTML = document.querySelector('#debug').innerHTML + `${state.direction} `
 
 }
 

@@ -4,11 +4,11 @@
 
 #debug {
     background: #ccc;
+    display: inline-block;
     height: auto;
     left: 0.5rem;
     padding: 0.25rem 0.5rem;
     position: absolute;
-    right: 0.5rem;
     top: 0.5rem;
 }
 
