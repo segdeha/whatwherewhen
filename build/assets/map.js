@@ -72,52 +72,51 @@ function bearing(startLat, startLng, destLat, destLng){
   return (brng + 360) % 360;
 }
 
-function setDirection(lat, lng) {
+function getDirection(lat, lng) {
     // compare passed in lat, lng with state.lastCoords
     // to determine which way the icon should face
     const brng = bearing(state.lastCoords.lat, state.lastCoords.lng, lat, lng)
+    let direction = null
 
     // 0 - 22.5 ... 0 + 22.5
     if (brng > -22.5 && brng < 22.5) {
-        state.direction = 'n'
+        direction = 'n'
     }
     // 180 - 22.5 ... 180 + 22.5
     else if (brng > 157.5 && brng < 202.5) {
-        state.direction = 's'
+        direction = 's'
     }
     // 90 - 22.5 ... 90 + 22.5
     else if (brng > 67.5 && brng < 112.5) {
-        state.direction = 'e'
+        direction = 'e'
     }
     // 270 - 22.5 ... 270 + 22.5
     else if (brng > 247.5 && brng < 292.5) {
-        state.direction = 'w'
+        direction = 'w'
     }
     // 45 - 22.5 ... 45 + 22.5
     else if (brng > 22.5 && brng < 67.5) {
-        state.direction = 'ne'
+        direction = 'ne'
     }
     // 315 - 22.5 ... 315 + 22.5
     else if (brng > 292.5 && brng < 327.5) {
-        state.direction = 'nw'
+        direction = 'nw'
     }
     // 135 - 22.5 ... 135 + 22.5
     else if (brng > 112.5 && brng < 157.5) {
-        state.direction = 'se'
+        direction = 'se'
     }
     // 202.5 - 22.5 ... 202.5 + 22.5
     else {
-        state.direction = 'sw'
+        direction = 'sw'
     }
-
-    document.querySelector('#debug').innerHTML = document.querySelector('#debug').innerHTML + `${state.direction} `
-
+    return direction
 }
 
-function getIcon() {
+function getIcon(direction) {
     const icon = {
-        url: `/assets/img/me-${state.direction}.png`,
-        scaledSize: new google.maps.Size(16, 16),
+        url: `/assets/img/me-${direction}.png`,
+        scaledSize: new google.maps.Size(24, 24),
         origin: new google.maps.Point(0,0),
         anchor: new google.maps.Point(0, 0),
     }
@@ -126,17 +125,16 @@ function getIcon() {
 
 function makeMeMarker(lat, lng) {
     const position = new google.maps.LatLng(lat, lng)
-    const icon = getIcon()
+    const icon = getIcon('n')
     const { map } = state
     state.meMarker = new google.maps.Marker({ position, icon, map })
 }
 
 function moveMeMarker(lat, lng) {
     const newPosition = new google.maps.LatLng(lat, lng)
-    setDirection(lat, lng)
     panToCoords(lat, lng)
     state.meMarker.setPosition(newPosition)
-    const icon = getIcon()
+    const icon = getIcon(getDirection(lat, lng))
     state.meMarker.setIcon(icon)
 }
 
