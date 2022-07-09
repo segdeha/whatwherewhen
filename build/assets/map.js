@@ -38,9 +38,7 @@ function followMe() {
         state.lastCoords = { lat: latitude, lng: longitude }
         // always move the user whether or not we’re following them
         moveMeMarker(latitude, longitude)
-        if (state.shouldFollow) {
-            panToCoords(latitude, longitude)
-        }
+        panToCoords(latitude, longitude)
     }
 }
 
