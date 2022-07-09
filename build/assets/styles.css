@@ -24,7 +24,11 @@ header {
         header ul li {
             border-right: solid 1px #666;
         }
-            header ul li a {}
+            header ul li a {
+                display: inline-block;
+                width: 100%;
+                height: 100%;
+            }
             header ul li.selected {
                 background: #5a88ed;
             }
