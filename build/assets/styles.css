@@ -2,6 +2,16 @@
     --header-height: 72px;
 }
 
+#debug {
+    background: #ccc;
+    height: auto;
+    left: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+}
+
 header {
     background: #333;
     bottom: 0;
